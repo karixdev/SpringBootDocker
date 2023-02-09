@@ -43,6 +43,18 @@ public class StudentService {
         return mapper.map(getByIdOrThrow(id));
     }
 
+    @Transactional
+    public StudentResponse update(UUID id, StudentRequest payload) {
+        Student student = getByIdOrThrow(id);
+
+        student.setName(payload.name());
+        student.setAge(payload.age());
+
+        repository.save(student);
+
+        return mapper.map(student);
+    }
+
     private Student getByIdOrThrow(UUID id) {
         return repository.findById(id).orElseThrow(() -> {
             throw new NotFoundException(

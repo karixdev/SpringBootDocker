@@ -48,4 +48,15 @@ public class StudentController {
                 HttpStatus.OK
         );
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<StudentResponse> update(
+            @PathVariable(name = "id") UUID id,
+            @RequestBody StudentRequest payload
+    ) {
+        return new ResponseEntity<>(
+                service.update(id, payload),
+                HttpStatus.OK
+        );
+    }
 }
