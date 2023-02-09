@@ -55,6 +55,11 @@ public class StudentService {
         return mapper.map(student);
     }
 
+    @Transactional
+    public void delete(UUID id) {
+        repository.delete(getByIdOrThrow(id));
+    }
+
     private Student getByIdOrThrow(UUID id) {
         return repository.findById(id).orElseThrow(() -> {
             throw new NotFoundException(
