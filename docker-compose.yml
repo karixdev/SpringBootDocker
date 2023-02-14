@@ -11,3 +11,26 @@ services:
       POSTGRES_DB: spring-boot-docker
     ports:
       - '5432:5432'
+    networks:
+      - db-network
+    healthcheck:
+      test: [ "CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'" ]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  app:
+    container_name: 'app'
+    restart: on-failure
+    build:
+      context: .
+    ports:
+      - '8080:8080'
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - db-network
+
+networks:
+  db-network:
